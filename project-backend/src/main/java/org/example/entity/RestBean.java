@@ -14,9 +14,17 @@ public record RestBean<T>(int code, T data, String massage) {
         return success(null);
     }
 
+
+    public static <T> RestBean<T> unauthorized(String massage){
+        return failure(401,massage);
+    }
     // 失败
     public static <T> RestBean<T> failure(int code, String massage){
         return new RestBean<>(code,null,massage);
+    }
+
+    public static <T> RestBean<T> forbidden(String massage){
+        return failure(403,massage);
     }
 
     // 使用JSON形式返回
