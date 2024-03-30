@@ -6,9 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.catalina.valves.rewrite.RewriteCond;
 import org.example.entity.RestBean;
+import org.example.entity.dto.AccountDto;
 import org.example.entity.vo.response.AuthorizeVO;
 import org.example.filter.JwtAuthorizeFilter;
+import org.example.service.AccountDtoService;
 import org.example.utils.JwtUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
@@ -34,6 +37,10 @@ public class SecurityConfiguration {
 
     @Resource
     JwtAuthorizeFilter jwtAuthorizeFilter;
+
+    @Resource
+    AccountDtoService service;
+
     @Bean
     // Security的过滤器链
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -81,12 +88,18 @@ public class SecurityConfiguration {
                                         Authentication authentication) throws IOException {
         response.setContentType("application/json;charset=utf-8");  // 数据格式为JSON,字符编码格式
         User user = (User) authentication.getPrincipal();
-        String token = jwtUtils.createJwt(user,1,"小明");
+        // 获取邮箱，采用重新查询获得
+        AccountDto accountDto = service.findAccountDtoByNameOrEmail(user.getUsername());
+        String token = jwtUtils.createJwt(user, accountDto.getId(), accountDto.getUsername());
         AuthorizeVO vo = new AuthorizeVO();
         vo.setExpire(jwtUtils.expireTime());
-        vo.setRole("");
+        vo.setRole(accountDto.getRole());
+        /*
+        * 可以使用springboot里自带的BeanUtils.copyProperties();方法来实现前一个dto数据复制到vo数据里，前提是名称类型一样
+        * BeanUtils.copyProperties(accountDto,vo);
+        * */
+        vo.setUsername(accountDto.getUsername());
         vo.setToken(token);
-        vo.setUsername("小明");
         response.getWriter().write(RestBean.success(vo).asJsonString());
     }
 
