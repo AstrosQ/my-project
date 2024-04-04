@@ -2,6 +2,7 @@
 import {reactive,ref} from "vue";
 import { User,Lock } from "@element-plus/icons-vue";
 import {login} from "@/net";
+import router from "@/router/index.js";
 
 const formRef = ref()
 
@@ -23,7 +24,7 @@ const rule = {
 function userLogin(){
   formRef.value.validate((valid) => {
     if (valid){
-      login(form.username, form.password, form.remember, () => {})
+      login(form.username, form.password, form.remember, () => {router.push('/index')})
     }
   })
 }
