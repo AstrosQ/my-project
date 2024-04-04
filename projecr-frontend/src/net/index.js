@@ -4,7 +4,7 @@ import {ElMessage} from "element-plus";
 const authItemName = "access_token"
 const defaultFailure = (message, code, url) =>{
     console.warn(`请求地址: ${url},状态码: ${code},错误信息: ${message}`)
-    ElMessage.warning(message)  // 弹窗警告
+    ElMessage.warning('用户名或密码错误')  // 弹窗警告
 }
 
 // token获取
@@ -25,7 +25,7 @@ function takeAccessToken(){
 }
 
 // token保存
-function storeAccessToken(token, remember, expire) {
+function storeAccessToken(remember, token, expire) {
     const authObj = {
         token: token,
         expire: expire}  // 封装为验证实体
@@ -43,9 +43,9 @@ function deleteAccessToken(){
     sessionStorage.removeItem(authItemName)
 }
 
-const defaultError = (error) =>{
-    console.error(error)
-    ElMessage.error('发生了一些错误，请联系管理员')  // 弹窗警告
+const defaultError = (error) => {
+    console.error(error);
+    ElMessage.error('发生了一些错误，请联系管理员')
 }
 
 function internalPost(url, data, header, success, failure, error = defaultError){
@@ -76,7 +76,7 @@ function login(username, password, remember, success, failure = defaultFailure) 
         'Content-Type': 'application/x-www-form-urlencoded'
     },(data) =>{
         storeAccessToken(remember, data.token, data.expire)
-        ElMessage.success(`登录成功，欢迎 ${date.username} 来到我们的系统`)
+        ElMessage.success(`登录成功，欢迎 ${data.username} 来到我们的系统`)
         success(data)
     },failure)
 }
