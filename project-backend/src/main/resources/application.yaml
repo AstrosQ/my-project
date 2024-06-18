@@ -4,7 +4,8 @@ spring:
     username: qinsanfen@163.com
     password: SKBLUNHLCAGNAAMX
   rabbitmq:
-    addresses: 192.168.0.105
+    addresses: localhost
+    port: 5672
     username: admin
     password: admin
     virtual-host: /test
@@ -14,11 +15,11 @@ spring:
       expire: 7
   data:
     redis:
-      host: 192.168.0.105
+      host: localhost
       port: 6379
       database: 0
   datasource:
-    url: jdbc:mysql://192.168.0.105:3306/jwt_test
+    url: jdbc:mysql://localhost:32768/jwt_test
     username: root
-    password: 123456
+    password: qinsanfen
     driver-class-name: com.mysql.cj.jdbc.Driver
