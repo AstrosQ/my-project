@@ -17,6 +17,11 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
+        <!--    接口参数校验模块    -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
         <!--    授权校验模块      -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
