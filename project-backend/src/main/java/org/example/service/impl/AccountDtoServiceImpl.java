@@ -75,7 +75,7 @@ public class AccountDtoServiceImpl extends ServiceImpl<AccountDtoMapper, Account
             amqpTemplate.convertAndSend("mail", data);
             // 存进redis里进行校验
                 stringRedisTemplate.opsForValue()
-                    .set(Const.VERIFY_EMAIL_LIMIT + email, String.valueOf(code), 3, TimeUnit.MINUTES);
+                    .set(Const.VERIFY_EMAIL_DATA + email, String.valueOf(code), 3, TimeUnit.MINUTES);
             return null;
         }
     }
@@ -85,7 +85,7 @@ public class AccountDtoServiceImpl extends ServiceImpl<AccountDtoMapper, Account
         // 账户是否被注册，邮箱是否被占用
         String email = vo.getEmail();
         String username = vo.getUsername();
-        String key = Const.VERIFY_EMAIL_LIMIT + email;
+        String key = Const.VERIFY_EMAIL_DATA + email;
         // 取redis里的验证码
         String code = stringRedisTemplate.opsForValue().get(key);
         if (code == null) return "请先获取验证码！";
@@ -105,7 +105,7 @@ public class AccountDtoServiceImpl extends ServiceImpl<AccountDtoMapper, Account
     @Override
     public String resetConfirm(ConfirmResetVO vo) {
         String email = vo.getEmail();
-        String code = stringRedisTemplate.opsForValue().get(Const.VERIFY_EMAIL_LIMIT + email);
+        String code = stringRedisTemplate.opsForValue().get(Const.VERIFY_EMAIL_DATA + email);
         if (code == null) return "请先获取验证码";
         if (!code.equals(vo.getCode())) return "验证码错误，请重新输入";
         return null;
@@ -119,7 +119,7 @@ public class AccountDtoServiceImpl extends ServiceImpl<AccountDtoMapper, Account
         String password = encoder.encode(vo.getPassword());
         boolean update = this.update().eq("email", email).set("password", password).update();
         if (update){
-            stringRedisTemplate.delete(Const.VERIFY_EMAIL_LIMIT + email);
+            stringRedisTemplate.delete(Const.VERIFY_EMAIL_DATA + email);
         }
         return null;
     }
