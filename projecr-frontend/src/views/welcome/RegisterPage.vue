@@ -119,7 +119,7 @@ const isEmailVerify = computed(() => /^[\w.-]+@[\w.-]+\.\w+$/.test(form.email))
           </el-input>
         </el-form-item>
         <el-form-item prop="password_repeat">
-          <el-input v-model="form.password_repeat" maxlength="20" type="password" placeholder="密码">
+          <el-input v-model="form.password_repeat" maxlength="20" type="password" placeholder="确认密码">
             <template #prefix>
               <el-icon><Lock /></el-icon>
             </template>
